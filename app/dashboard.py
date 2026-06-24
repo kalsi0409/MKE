@@ -4,6 +4,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import subprocess
+import sys
+import streamlit as st
+
+# --- ROBUST BACKGROUND PIPELINE RUNNER ---
+# This dynamically finds your root folder, no matter where Streamlit runs it from
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Points to 'app'
+ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))  # Points to 'portfolio' root
+
+# Define exact file paths relative to the project root
+pipeline_script = os.path.join(ROOT_DIR, "marketing-attribution-engine", "run_pipeline.py")
+# Update this next line to the exact file path your app expects to find
+expected_data_file = os.path.join(ROOT_DIR, "marketing-attribution-engine", "data", "processed_attribution.csv")
+
+# If the data file isn't found, try to run the pipeline automatically
+if not os.path.exists(expected_data_file):
+    with st.spinner("📦 Core data assets missing! Running pipeline script in the background..."):
+        if os.path.exists(pipeline_script):
+            try:
+                # Runs the script from the exact directory it lives in
+                subprocess.run(
+                    [sys.executable, pipeline_script], 
+                    check=True, 
+                    cwd=os.path.dirname(pipeline_script)
+                )
+                st.success("✅ Data assets generated successfully! Re-loading app...")
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Tried running the pipeline but failed: {e}")
+                st.stop()
+        else:
+            st.error(f"❌ Could not find 'run_pipeline.py' at: {pipeline_script}")
+            st.stop()
 
 st.set_page_config(page_title="Enterprise Attribution Suite", layout="wide")
 
