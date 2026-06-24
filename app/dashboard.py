@@ -12,8 +12,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
 # 2. Point directly to your pre-generated file
-# (Ensure 'processed_attribution.csv' matches your exact pipeline output file name)
-data_file_path = os.path.join(ROOT_DIR, "data", "conversions.csv")
+data_file_path = os.path.join(ROOT_DIR, "data", "raw", "conversions.csv")
 
 if os.path.exists(data_file_path):
     df = pd.read_csv(data_file_path)
