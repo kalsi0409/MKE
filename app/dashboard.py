@@ -4,36 +4,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-import subprocess
-import sys
+import pandas as pd
 import streamlit as st
 
-# --- AUTOMATIC BACKGROUND PIPELINE RUNNER ---
-# Get the absolute path to the root directory where run_pipeline.py now lives
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))  # Points to 'app'
-ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))  # Points to repository root
+# 1. Locate the absolute path to your data folder
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
-pipeline_script = os.path.join(ROOT_DIR, "run_pipeline.py")
-expected_data_file = os.path.join(ROOT_DIR, "data", "processed_attribution.csv") # Adjust if your output file name is different
+# 2. Point directly to your pre-generated file
+# (Ensure 'processed_attribution.csv' matches your exact pipeline output file name)
+data_file_path = os.path.join(ROOT_DIR, "data", "processed_attribution.csv")
 
-# Run pipeline automatically if the output data file is missing
-if not os.path.exists(expected_data_file):
-    with st.spinner("📦 Core data assets missing! Generating metrics in the background..."):
-        if os.path.exists(pipeline_script):
-            try:
-                subprocess.run(
-                    [sys.executable, pipeline_script], 
-                    check=True, 
-                    cwd=ROOT_DIR
-                )
-                st.success("✅ Data assets generated successfully! Reloading...")
-                st.rerun()
-            except Exception as e:
-                st.error(f"❌ Error running pipeline script: {e}")
-                st.stop()
-        else:
-            st.error(f"❌ Critical Error: Could not find 'run_pipeline.py' at {pipeline_script}")
-            st.stop()
+if os.path.exists(data_file_path):
+    df = pd.read_csv(data_file_path)
+    # Continue with your normal app layout, charts, and network graph logic below...
+else:
+    st.error(f"📁 Could not find pre-generated data at: {data_file_path}")
+    st.info("Please ensure your local data files are committed and pushed to GitHub.")
+    st.stop()
 
 st.set_page_config(page_title="Enterprise Attribution Suite", layout="wide")
 
