@@ -1,0 +1,31 @@
+==========================================================================
+MARKETING ANALYTICS ATTRIBUTION ENGINE - EXECUTION GUIDE
+==========================================================================
+
+[STEP 1] Environment Initialization & Dependency Setup
+--------------------------------------------------------------------------
+Open Git Bash or your terminal at the project root directory and execute 
+the following command to install all mandatory statistical and UI libraries:
+
+    pip install -r requirements.txt
+
+[STEP 2] Execute Core Analytics Pipeline
+--------------------------------------------------------------------------
+Run the master orchestration script. This handles raw clickstream data 
+synthesis (25,000 users), processes 5 heuristic models (including 
+U-Shaped Position-Based and Exponential Time-Decay), fits the Markov Chain 
+algorithmic matrix, and exports an automated executive summary brief:
+
+    python run_pipeline.py
+
+[STEP 3] Launch Interactive Visualization Dashboard
+--------------------------------------------------------------------------
+Deploy the Streamlit visual node locally to explore cross-model variance 
+plots, state-transition probability heatmaps, and the live programmatic 
+budget reallocation simulator:
+
+    streamlit run app/dashboard.py
+
+==========================================================================
+SYSTEM DEPENDENCIES VERIFIED: Python 3.10+, Pandas, NumPy, Matplotlib, Seaborn
+==========================================================================
