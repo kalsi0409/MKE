@@ -48,6 +48,16 @@ def load_attribution_data():
     markov_results = m_engine.compute_markov_attribution()
 
     final_comparison = heuristic_results.merge(markov_results, on='channel')
+
+    final_comparison = final_comparison.rename(columns={
+        'first_revenue': 'First-Touch',
+        'last_revenue': 'Last-Touch',
+        'linear_revenue': 'Linear',
+        'position_based_revenue': 'Position-Based',
+        'time_decay_revenue': 'Exponential Time-Decay',
+        'markov_revenue': 'Markov Algorithmic'
+    })
+
     return final_comparison
 
 
